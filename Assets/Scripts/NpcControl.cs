@@ -8,6 +8,7 @@ public class NPCMovement : MonoBehaviour
     public float moveSpeed = 2f;
     private int currentWaypointIndex = 0;
     private int previousWaypointIndex = 0;
+
     private void Start()
     {
         if (waypoints.Length == 0)
@@ -40,19 +41,30 @@ public class NPCMovement : MonoBehaviour
             previousWaypointIndex = currentWaypointIndex;
             currentWaypointIndex = Random.Range(0, waypoints.Length);
 
+            if (currentWaypointIndex >= waypoints.Length)
+            {
+                currentWaypointIndex = 0;
+            }
+
             Debug.Log("Moving to waypoint " + currentWaypointIndex);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        currentWaypointIndex = previousWaypointIndex;
-        /*if (currentWaypointIndex >= waypoints.Length)
+        if (currentWaypointIndex == previousWaypointIndex)
+        {
+            currentWaypointIndex = Random.Range(0, waypoints.Length);
+        }
+        else
+        {
+            currentWaypointIndex = previousWaypointIndex;
+        }
+        if (currentWaypointIndex >= waypoints.Length)
         {
             currentWaypointIndex = 0;
-        }*/
+        }
 
         Debug.Log("Colliding with obstacle. Moving to waypoint " + currentWaypointIndex);
-        
     }
 }
