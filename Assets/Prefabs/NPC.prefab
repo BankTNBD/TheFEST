@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6907097485515847499}
   - component: {fileID: 6907097485515847498}
   - component: {fileID: 6907097485515847496}
-  - component: {fileID: 6907097485515847508}
   - component: {fileID: 5959484334061328553}
   m_Layer: 0
   m_Name: NPC
@@ -132,25 +131,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.32792252, y: 0.1863457}
   m_EdgeRadius: 0
---- !u!114 &6907097485515847508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6907097485515847502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 913aa80e3d85245dd9cc70f3b5be23af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  isWalking: 1
-  walkTime: 1
-  waitTime: 0
-  WalkDirection: 2
-  rotate: {fileID: 0}
-  junction: {fileID: 0}
 --- !u!50 &5959484334061328553
 Rigidbody2D:
   serializedVersion: 4

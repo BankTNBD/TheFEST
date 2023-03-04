@@ -4,9 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Junction
-  - Rotation
   - NPC
+  - NPCs
   layers:
   - Default
   - TransparentFX

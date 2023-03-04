@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class NPC : MonoBehaviour
+public class TalkWithNPC : MonoBehaviour
 {
     public GameObject dialoguePanel;
     public Text dialogueText;
@@ -14,7 +15,8 @@ public class NPC : MonoBehaviour
     public float wordSpeed;
     public bool playerIsClose;
 
-    // Update is called once per frame
+    public int sceneIndex;
+    
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.E) && playerIsClose)
@@ -35,7 +37,7 @@ public class NPC : MonoBehaviour
         }
     }
 
-public void zeroText()
+    public void zeroText()
     {
         dialogueText.text = "";
         index = 0;
@@ -63,22 +65,42 @@ public void zeroText()
         }
         else
         {
+            LoadScene(sceneIndex);
             zeroText();
         }
     }
-    private void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player")) 
+        if (other.gameObject.tag == "Player") 
         { 
             playerIsClose = true;
         }
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player")) 
+        if (other.tag == "Player")
         { 
             playerIsClose = false;
             zeroText();
+            contButton.SetActive(false);
+
+        }
+    }
+
+    public void LoadScene(int sceneIndex)
+    {
+        StartCoroutine(LoadAsync(sceneIndex));
+    }
+
+    IEnumerator LoadAsync(int sceneIndex)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
+
+        while (!operation.isDone)
+        {
+            Debug.Log(operation.progress);
+
+            yield return null;
         }
     }
 }
