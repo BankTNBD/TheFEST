@@ -1,81 +1,58 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class NpcControl : MonoBehaviour
+public class NPCMovement : MonoBehaviour
 {
-    public float moveSpeed;
-    private Rigidbody2D myRigidbody;
-    public bool isWalking;
-    public float walkTime;
-    public float waitTime;
-    private float walkCounter;
-    private float waitCounter;
-    public int WalkDirection;
-    public GameObject rotate;
-    public GameObject junction;
-
-    // Use this for initialization
-    void Start()
+    public Transform[] waypoints;
+    public float moveSpeed = 2f;
+    private int currentWaypointIndex = 0;
+    private int previousWaypointIndex = 0;
+    private void Start()
     {
-        myRigidbody = GetComponent<Rigidbody2D>();
-        waitCounter = waitTime;
-        walkCounter = walkTime;
-        if (WalkDirection > 3 || WalkDirection < 0)
+        if (waypoints.Length == 0)
         {
-            WalkDirection = 0;
+            Debug.LogError("No waypoints found!");
+            return;
         }
-        //ChooseDirection();
+
+        transform.position = waypoints[0].position;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (isWalking)
+        if (waypoints.Length == 0)
         {
-            waitCounter -= Time.deltaTime;
-
-            switch (WalkDirection)
-            {
-                case 0:
-                    myRigidbody.velocity = new Vector2(0, moveSpeed);
-                    break;
-                case 1:
-                    myRigidbody.velocity = new Vector2(moveSpeed, 0);
-                    break;
-                case 2:
-                    myRigidbody.velocity = new Vector2(0, -moveSpeed);
-                    break;
-                case 3:
-                    myRigidbody.velocity = new Vector2(-moveSpeed, 0);
-                    break;
-
-            }
-
+            return;
         }
 
+        MoveToNextWaypoint();
+    }
+
+    private void MoveToNextWaypoint()
+    {
+        Vector2 targetDirection = ((Vector2)waypoints[currentWaypointIndex].position - (Vector2)transform.position).normalized;
+
+        transform.Translate(targetDirection * moveSpeed * Time.deltaTime);
+
+        if (Vector2.Distance(transform.position, waypoints[currentWaypointIndex].position) < 0.1f)
+        {
+            previousWaypointIndex = currentWaypointIndex;
+            currentWaypointIndex = Random.Range(0, waypoints.Length);
+
+            Debug.Log("Moving to waypoint " + currentWaypointIndex);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //Debug.Log("HIT");
+        currentWaypointIndex = previousWaypointIndex;
+        /*if (currentWaypointIndex >= waypoints.Length)
+        {
+            currentWaypointIndex = 0;
+        }*/
 
-        if (collision.tag == "Rotation")
-        {
-            rotate = GameObject.Find(collision.name);
-            WalkDirection = rotate.GetComponent<JunctionRotate>().rotate(WalkDirection);
-            transform.position = rotate.transform.position;
-            moveSpeed = UnityEngine.Random.Range(2, 5);
-        }
-        else if (collision.tag == "Junction")
-        {
-            junction = GameObject.Find(collision.name);
-            WalkDirection = junction.GetComponent<JunctionDecision>().decision();
-            transform.position = junction.transform.position;
-            UnityEngine.Random.Range(2, 5);
-        }
+        Debug.Log("Colliding with obstacle. Moving to waypoint " + currentWaypointIndex);
+        
     }
 }
