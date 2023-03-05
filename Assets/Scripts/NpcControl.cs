@@ -5,9 +5,10 @@ using UnityEngine;
 public class NPCMovement : MonoBehaviour
 {
     public Transform[] waypoints;
-    public float moveSpeed = 2f;
+    public float maxMoveSpeed = 2f;
     private int currentWaypointIndex = 0;
     private int previousWaypointIndex = 0;
+    private float moveSpeed;
 
     private void Start()
     {
@@ -17,7 +18,7 @@ public class NPCMovement : MonoBehaviour
             return;
         }
 
-        transform.position = waypoints[0].position;
+        transform.position = waypoints[Random.Range(0,waypoints.Length)].position;
     }
 
     private void Update()
@@ -34,6 +35,7 @@ public class NPCMovement : MonoBehaviour
     {
         Vector2 targetDirection = ((Vector2)waypoints[currentWaypointIndex].position - (Vector2)transform.position).normalized;
 
+        moveSpeed = NextFloat(2, maxMoveSpeed);
         transform.Translate(targetDirection * moveSpeed * Time.deltaTime);
 
         if (Vector2.Distance(transform.position, waypoints[currentWaypointIndex].position) < 0.1f)
@@ -65,5 +67,12 @@ public class NPCMovement : MonoBehaviour
                 currentWaypointIndex = 0;
             }
         }
+    }
+
+    static float NextFloat(float min, float max)
+    {
+        System.Random random = new System.Random();
+        double val = (random.NextDouble() * (max - min) + min);
+        return (float)val;
     }
 }  
