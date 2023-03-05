@@ -6,21 +6,16 @@ using UnityEngine.UI;
 
 public class TalkWithNPC : MonoBehaviour
 {
-    public GameObject dialoguePanel;
-    public Text dialogueText;
     public string[] dialogue;
-    private int index;
-
-    public GameObject contButton;
-    public float wordSpeed;
-    public bool playerIsClose;
-
     public int sceneIndex;
-    
+
+
+    /*
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.E) && playerIsClose)
         {
+            Debug.Log(dialogue[1]);
             if (dialoguePanel.activeInHierarchy)
             {
                 zeroText();
@@ -31,7 +26,11 @@ public class TalkWithNPC : MonoBehaviour
                 StartCoroutine(Typing());
             }
         }
-        if(dialogueText.text == dialogue[index])
+        if (Input.GetKeyDown(KeyCode.Space) && contButton.activeInHierarchy)
+        {
+            NextLine();
+        }
+        if(dialogueText.text.Length >= dialogue[index].Length-1)
         {
             contButton.SetActive(true);
         }
@@ -44,10 +43,12 @@ public class TalkWithNPC : MonoBehaviour
         dialoguePanel.SetActive(false);
     }
 
-    IEnumerator Typing()    
+    private IEnumerator Typing()    
     {
+        Debug.Log(dialogue[index]);
         foreach(char letter in dialogue[index].ToCharArray())   
         {
+
             dialogueText.text += letter;
             yield return new WaitForSeconds(wordSpeed);
         }
@@ -65,8 +66,9 @@ public class TalkWithNPC : MonoBehaviour
         }
         else
         {
-            LoadScene(sceneIndex);
             zeroText();
+            LoadScene(sceneIndex);
+
         }
     }
     void OnTriggerEnter2D(Collider2D other)
@@ -102,5 +104,5 @@ public class TalkWithNPC : MonoBehaviour
 
             yield return null;
         }
-    }
+    }*/
 }
