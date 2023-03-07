@@ -87,7 +87,7 @@ public class NpcButton : MonoBehaviour
     {
         if (other.tag == "NPCs")
         {
-            NPCs = GameObject.Find(other.name);
+            NPCs = other.gameObject;
             dialogue = NPCs.GetComponent<TalkWithNPC>().dialogue;
             sceneIndex = NPCs.GetComponent<TalkWithNPC>().sceneIndex;
             playerIsClose = true;
